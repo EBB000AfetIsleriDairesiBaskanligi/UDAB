@@ -44,7 +44,7 @@ def createVoiceFile(message, voiceType):
 def printMessagesForSuccess():
     print(variables.controlSuccessMsg)
     print(variables.controlAgain)
-    sleep(6)
+    sleep(30)
 
 def setDictionaryForEarthquakeData(line):
     columns = line.split()
@@ -77,6 +77,7 @@ def importantEarthquake(coordinates, attention):
     voiceAgain=0
     while voiceAgain<3:
         openVoiceFile(variables.exportAlertVoice)
+        sleep(3)
         voiceAgain+=1
 
 def app():
@@ -90,13 +91,14 @@ def app():
                 for line in lines[1:2]:
                     lastEarthquake = setDictionaryForEarthquakeData(line)
                     attention = f"Tarih: {lastEarthquake['date']} ==> {lastEarthquake['area']} bölgesinde {lastEarthquake['ML']} büyüklüğünde ve {lastEarthquake['depth']}km derinliğinde deprem oldu."
-                    print(f"Kontrol No: {controlNo+1}" ,attention)
-                    if (attention != earthquakeInfo):
+                    if earthquakeInfo != attention:
                         earthquakeInfo = attention
-                        if float(lastEarthquake['ML']) > 5:
+                        print(f"Kontrol No: {controlNo+1}" ,attention)
+                        if float(lastEarthquake['ML']) > 1:
                             coordinates = [lastEarthquake['latitude'], lastEarthquake['longitude']]
                             importantEarthquake(coordinates, attention)
                         else: pass
+                    else: print(f"Kontrol No: {controlNo+1} Yeni Deprem Bilgisi Bulunmamakta.")    
                 printMessagesForSuccess()
             else:
                 print(variables.dataScrappingErrorMsg)
